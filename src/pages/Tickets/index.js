@@ -26,13 +26,16 @@ export default class Tickets extends Component {
       per_page: 10,
       total: 0,
       total_pages: 0,
-      ticketName: "",
+      ticket_name: "",
       status: "",
       priority: "",
       accepted: false,
       isModalOpen: false,
       action: "",
       isChecked: false,
+      isFilterChecked: false,
+      customer_name: localStorage.getItem("name"),
+      avatar: localStorage.getItem("avatar"),
       role: localStorage.getItem("role"),
     };
     if (localStorage.getItem("token")) {
@@ -72,7 +75,7 @@ export default class Tickets extends Component {
     this.setState({
       isModalOpen: true,
       id: "",
-      ticketName: "",
+      ticket_name: "",
       status: "open",
       priority: "",
       accepted: false,
@@ -84,7 +87,7 @@ export default class Tickets extends Component {
     this.setState({
       isModalOpen: true,
       id: selectedItem.id,
-      ticketName: selectedItem.ticket_name,
+      ticket_name: selectedItem.ticket_name,
       status: selectedItem.status,
       priority: selectedItem.priority,
       accepted: selectedItem.accepted,
@@ -95,7 +98,7 @@ export default class Tickets extends Component {
   handleSave = (e) => {
     e.preventDefault();
     let data = {
-      ticketName: this.state.ticketName,
+      ticket_name: this.state.ticket_name,
       status: this.state.status,
       priority: this.state.priority,
       accepted: this.state.accepted,
@@ -104,10 +107,18 @@ export default class Tickets extends Component {
     let url = "";
 
     if (this.state.action === "insert") {
+      let dataInsert = {
+        ticket_name: this.state.ticket_name,
+        status: this.state.status,
+        priority: this.state.priority,
+        accepted: this.state.accepted,
+        avatar: this.state.avatar,
+        customer_name: this.state.customer_name,
+      };
       url = "https://6514021d8e505cebc2ea861a.mockapi.io/api/v1/ticket";
 
       axios
-        .post(url, data)
+        .post(url, dataInsert)
         .then((res) => {
           this.getTicket();
           this.handleClose();
@@ -158,7 +169,7 @@ export default class Tickets extends Component {
       .then((res) => {
         this.setState({
           total: res.data.length,
-          total_pages: Math.floor(res.data.length / 10),
+          total_pages: Math.ceil(res.data.length / 10),
         });
       })
       .catch((err) => {
@@ -166,15 +177,21 @@ export default class Tickets extends Component {
       });
   };
 
-  getTicketSortBy = () => {
+  handleShortBy = () => {
     this.setState({
       isChecked: !this.state.isChecked,
     });
-    if (this.state.isChecked === true) {
+    this.getTicketSortBy();
+  };
+
+  getTicketSortBy = () => {
+    if (!this.state.isChecked) {
       let url = new URL(
         "https://6514021d8e505cebc2ea861a.mockapi.io/api/v1/ticket"
       );
-      url.searchParams.append("sortBy", "date");
+      url.searchParams.append("sortBy", "createdAt");
+      url.searchParams.append("page", this.state.activePage);
+      url.searchParams.append("limit", this.state.per_page);
       axios
         .get(url)
         .then((res) => {
@@ -185,16 +202,45 @@ export default class Tickets extends Component {
         .catch((err) => {
           console.log(err.message);
         });
-    } 
+    } else {
+      this.getTicket();
+    }
+  };
+
+  handleFilter = (filter) => {
+    this.setState({
+      isFilterChecked: !this.state.isFilterChecked,
+    });
+    this.getTicketFilter(filter);
+  };
+
+  getTicketFilter = (filter) => {
+    if (!this.state.isFilterChecked) {
+      let url = new URL(
+        "https://6514021d8e505cebc2ea861a.mockapi.io/api/v1/ticket"
+      );
+      url.searchParams.append("priority", `${filter}`);
+      axios
+        .get(url)
+        .then((res) => {
+          this.setState({
+            dataTicket: res.data,
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      this.getTicket();
+    }
   };
   componentDidMount() {
     this.getTicket();
     this.getTicketAll();
   }
   render() {
-    const { ticketName, status, priority, action, accepted, role, isChecked } =
+    const { ticket_name, status, priority, action, accepted, role, isChecked } =
       this.state;
-    console.log(this.state.isChecked);
     return (
       <div
         className={
@@ -211,9 +257,9 @@ export default class Tickets extends Component {
             darkTheme={localStorage.getItem("darkTheme")}
           />
           <Card className="mx-3 my-3 p-3">
-            <div className="d-flex align-items center justify-content-between mb-4">
+            <div className="d-flex align-items center justify-content-between mb-4 flex-wrap">
               <h3 className="mb-0">All tickets</h3>
-              <div className="d-flex gap-4">
+              <div className="d-flex gap-4 flex-wrap">
                 <Dropdown className="d-flex sort gap-2 align-items-center">
                   <BiSortDown className="icons" />
                   <p className="mb-0">Sort</p>
@@ -223,70 +269,99 @@ export default class Tickets extends Component {
                       <Form.Check
                         type="checkbox"
                         id="custom-switch"
-                        label="Check this switch"
+                        label="Date"
                         checked={isChecked}
-                        onChange={this.getTicketSortBy}
+                        onChange={this.handleShortBy}
                       />
                     </Form>
                   </Dropdown.Menu>
                 </Dropdown>
-                <div className="d-flex filter gap-2 align-items-center">
+                <Dropdown className="d-flex sort gap-2 align-items-center">
                   <FaFilter className="icons" />
                   <p className="mb-0">Filter</p>
-                </div>
+                  <Dropdown.Toggle split id="dropdown-split-basic" />
+                  <Dropdown.Menu>
+                    <Form className="px-2">
+                      <Form.Check
+                        type="checkbox"
+                        id="custom-switch"
+                        label="High"
+                        onChange={() => this.handleFilter("high")}
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        id="custom-switch"
+                        label="Normal"
+                        onChange={() => this.handleFilter("normal")}
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        id="custom-switch"
+                        label="Low"
+                        onChange={() => this.handleFilter("low")}
+                      />
+                    </Form>
+                  </Dropdown.Menu>
+                </Dropdown>
                 {role === "guest" && (
                   <Button onClick={() => this.handleAdd()}>New Ticket</Button>
                 )}
               </div>
             </div>
-            <Table className="dataTable">
-              <thead>
-                <tr>
-                  <th>Ticket details</th>
-                  <th>Customer name</th>
-                  <th>Date</th>
-                  <th>Priority</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.dataTicket.map((item, index) => {
-                  const dateObject = new Date(item.createdAt);
-                  const options = {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  };
-                  const formattedDate = dateObject.toLocaleDateString(
-                    "en-US",
-                    options
-                  );
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <img src={item.avatar} alt={item.avatar} />
-                        {item.ticket_name}
-                      </td>
-                      <td>{item.customer_name}</td>
-                      <td>{formattedDate}</td>
-                      <td>
-                        <p className={`priority-${item.priority} text-center`}>
-                          {item.priority}
-                        </p>
-                      </td>
-                      <td>
-                        <div
-                          className="text-center detail"
-                          onClick={() => this.handleEdit(item)}
-                        >
-                          <CiMenuKebab />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+            <div className="table-responsive-lg">
+              <table className="dataTable">
+                <thead>
+                  <tr>
+                    <th>Ticket details</th>
+                    <th>Customer name</th>
+                    <th>Date</th>
+                    <th>Priority</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.dataTicket.map((item, index) => {
+                    const dateObject = new Date(item.createdAt);
+                    const options = {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    };
+                    const formattedDate = dateObject.toLocaleDateString(
+                      "en-US",
+                      options
+                    );
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <img src={item.avatar} alt={item.avatar} />
+                          {item.ticket_name}
+                        </td>
+                        <td>{item.customer_name}</td>
+                        <td>{formattedDate}</td>
+                        <td>
+                          <p
+                            className={`priority-${item.priority} text-center`}
+                          >
+                            {item.priority}
+                          </p>
+                        </td>
+                        <td>
+                          {role === "admin" && (
+                            <div
+                              className="text-center detail"
+                              onClick={() => this.handleEdit(item)}
+                            >
+                              <CiMenuKebab />
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
             <Pagination size="sm" className="d-flex justify-content-end">
               {this.state.activePage > 1 && (
                 <Pagination.Prev
@@ -338,37 +413,27 @@ export default class Tickets extends Component {
                 <Form.Label>Ticket detail</Form.Label>
                 <Form.Control
                   type="text"
-                  name="ticketName"
+                  name="ticket_name"
                   placeholder="Ticket details"
-                  value={ticketName}
+                  value={ticket_name}
                   onChange={role === "guest" ? this.handleChange : ""}
                 />
               </Form.Group>
               <Form.Group controlId="status" className="mb-2">
                 <Form.Label>Status</Form.Label>
-                {role === "admin" && (
-                  <Form.Control
-                    type="text"
-                    name="priority"
-                    placeholder="Priority"
-                    value={status}
-                  />
-                )}
-                {role === "guest" && (
-                  <Form.Select
-                    aria-label="Default select example"
-                    className="form-control"
-                    name="status"
-                    onChange={this.handleChange}
-                    required
-                  >
-                    <option selected={true}>Select Status</option>
-                    <option value={"unresolved"}>Unresolved</option>
-                    <option value={"overdue"}>Overdue</option>
-                    <option value={"open"}>Open</option>
-                    <option value={"onhold"}>On hold</option>
-                  </Form.Select>
-                )}
+                <Form.Select
+                  aria-label="Default select example"
+                  className="form-control"
+                  name="status"
+                  onChange={this.handleChange}
+                  required
+                >
+                  <option selected={true}>Select Status</option>
+                  <option value={"unresolved"}>Unresolved</option>
+                  <option value={"overdue"}>Overdue</option>
+                  <option value={"open"}>Open</option>
+                  <option value={"onhold"}>On hold</option>
+                </Form.Select>
               </Form.Group>
               <Form.Group controlId="priority" className="mb-2">
                 <Form.Label>Priority</Form.Label>
@@ -412,6 +477,17 @@ export default class Tickets extends Component {
                       Reject
                     </option>
                   </Form.Select>
+                </Form.Group>
+              )}
+              {role === "customer" && (
+                <Form.Group controlId="accepted" className="mb-2">
+                  <Form.Label></Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="accepted"
+                    placeholder="Accepted"
+                    value={accepted}
+                  />
                 </Form.Group>
               )}
             </Modal.Body>

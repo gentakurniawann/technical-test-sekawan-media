@@ -22,7 +22,7 @@ export default function Sidebar() {
   };
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const logout = () => {
     localStorage.clear();
     window.location = "/";
@@ -30,9 +30,7 @@ export default function Sidebar() {
   return (
     <div>
       <div
-        className={
-          sidebar ? "toggle-open py-4 px-2 active" : "toggle-open py-4 px-2"
-        }
+        className={sidebar ? "toggle-open px-2 active" : "toggle-open px-2"}
         style={{ display: "none" }}
         onClick={showSidebar}
       >
@@ -44,7 +42,9 @@ export default function Sidebar() {
           <h3 className="mb-0">Dashboard Kit</h3>
           <div
             className={
-              sidebar ? "toggle-close py-4 px-2 active" : "toggle-open py-4 px-2"
+              sidebar
+                ? "toggle-close py-4 px-2 active"
+                : "toggle-open py-4 px-2"
             }
             style={{ display: "none" }}
             onClick={showSidebar}
@@ -110,7 +110,10 @@ export default function Sidebar() {
             <PiMedalFill className="icons" />
             <p className="mb-0">{t("Subscription")}</p>
           </Link>
-          <Link className="d-flex align-items-center gap-2 sidebar-content-item py-3 px-4" onClick={logout}>
+          <Link
+            className="d-flex align-items-center gap-2 sidebar-content-item py-3 px-4"
+            onClick={logout}
+          >
             <BiSolidLogOut className="icons" />
             <p className="mb-0">{t("Logout")}</p>
           </Link>

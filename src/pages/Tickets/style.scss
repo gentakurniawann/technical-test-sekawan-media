@@ -26,9 +26,14 @@
         color: $light-grey;
         width: 16px;
       }
-
+      .table-responsive {
+        max-width: 100%;
+        width: 78.75vw;
+      }
       .dataTable {
+        width: 100% !important;
         td {
+          // min-width: 150px;
           padding: 16px 8px;
           text-transform: capitalize;
           img {
@@ -39,6 +44,7 @@
           }
           .detail {
             cursor: pointer;
+            min-width: none !important;
           }
         }
         .priority-high {
@@ -61,5 +67,62 @@
         }
       }
     }
+  }
+
+  &.darkTheme {
+    background-color: $dark-grey-120;
+    .table {
+      background-color: $black-doff !important;
+    }
+    td {
+      color: $white !important;
+    }
+    th {
+      color: $white !important;
+    }
+    .header {
+      h2 {
+        color: $white;
+      }
+      .icons {
+        color: $white;
+      }
+      .toggle-language {
+        span {
+          color: $white;
+          &.active {
+            border-bottom: 2px solid $white;
+          }
+        }
+      }
+      .divider {
+        background-color: $white;
+      }
+      p {
+        color: $white;
+      }
+    }
+
+    .content {
+      .card {
+        background-color: $black-doff;
+      }
+      h3 {
+        color: $white;
+      }
+      h1 {
+        color: $white;
+      }
+      p {
+        color: $white !important;
+      }
+      span {
+        color: $white !important;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
   }
 }

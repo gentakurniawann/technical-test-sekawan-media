@@ -18,8 +18,9 @@ export default class Overview extends Component {
       totalOverdue: 0,
       totalOpen: 0,
       totalOnHold: 0,
+      role: localStorage.getItem("role")
     };
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("token") && this.state.role === "admin") {
       this.state.token = localStorage.getItem("token");
     } else {
       window.location = "/";
