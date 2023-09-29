@@ -1,15 +1,15 @@
 ## Version
-Node Js : v16.13.1
-React Js : v18.2.0
+Node Js : v16.13.1 \
+React Js : v18.2.0 \
 
 ## Username & Password
 ### Admin
-email : Viviane90@yahoo.com
-password : 8nrCenKTjzvrbCE
+email : Viviane90@yahoo.com \
+password : 8nrCenKTjzvrbCE \
 
 ### Customer
-email : Gene7@gmail.com
-password : lXwCHmYB2ySJBxs
+email : Gene7@gmail.com \
+password : lXwCHmYB2ySJBxs \
 
 ## How to Start
 ### `npm start`
