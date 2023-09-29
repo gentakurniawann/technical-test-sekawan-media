@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Shrikhand&display=swap");
+
+@import "./variables.scss";
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: Poppins;
+  font-style: normal;
+  line-height: normal;
+}
+section {
+  padding-top: 36px;
+  padding-bottom: 36px;
+}
+h1 {
+  color: $black;
+  font-size: 32px;
+  font-weight: 600;
+}
+h2 {
+  color: $black;
+  font-size: 24px;
+  font-weight: 600;
+}
+h3 {
+  color: $black;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+p {
+  color: $black;
+  font-weight: 400;
+}
+
+label {
+  color: $light-grey;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+input::placeholder {
+  color: $light-grey !important;
+}
+
+th {
+  color: $light-grey !important;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+td {
+  color: $black !important;
+  font-size: 16px;
+  font-weight: 400;
+}

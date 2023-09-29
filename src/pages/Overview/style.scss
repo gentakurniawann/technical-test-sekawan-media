@@ -1,0 +1,153 @@
+@import "../../assets/scss/variables";
+
+.overview {
+  background-color: $light-blue;
+  min-height: 100vh;
+  height: auto;
+
+  .content {
+    width: 100%;
+    .row-total {
+      h3 {
+        color: $light-grey;
+      }
+    }
+    .card-chart {
+      display: flex;
+      justify-content: center;
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: 2/1 !important;
+      }
+    }
+    .card {
+      border-radius: 8px;
+      a {
+        font-size: 16px;
+        color: $blue;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .group {
+        color: $light-grey;
+        span {
+          color: $black;
+          font-weight: 500;
+        }
+      }
+      .divider {
+        width: 100%;
+        height: 1px;
+        background-color: $light-grey;
+      }
+      .unresolved-list {
+        .ticket-name {
+          font-weight: 500;
+        }
+        .customer-name {
+          color: $light-grey;
+        }
+      }
+      .task-list {
+        p::first-letter {
+          text-transform: capitalize;
+        }
+        .ticket-name {
+          font-weight: 500;
+        }
+
+        .priority-high {
+          color: $white;
+          background-color: $red;
+          padding: 4px 16px;
+          border-radius: 16px;
+        }
+        .priority-normal {
+          color: $white;
+          background-color: $green;
+          padding: 4px 16px;
+          border-radius: 16px;
+        }
+        .priority-low {
+          color: $white;
+          background-color: $yellow;
+          padding: 4px 16px;
+          border-radius: 16px;
+        }
+      }
+      .create-new-task {
+        .btn {
+          background-color: $light-grey;
+          border: none;
+          height: 24px;
+          padding: 0 8px;
+          &:hover {
+            background-color: $dark-grey-80;
+          }
+        }
+      }
+      .today {
+        color: $light-grey;
+        span {
+          color: $black;
+          font-weight: 500;
+        }
+      }
+      &:hover {
+        border-color: $blue;
+        h3 {
+          color: $blue;
+        }
+        h1 {
+          color: $blue;
+        }
+      }
+    }
+  }
+
+  &.darkTheme {
+    background-color: $dark-grey-120;
+
+    .header {
+        h2{
+            color: $white;
+        }
+      .icons {
+        color: $white;
+      }
+      .toggle-language {
+        span {
+          color: $white;
+          &.active {
+            border-bottom: 2px solid $white;
+          }
+        }
+      }
+      .divider {
+        background-color: $white;
+      }
+      p {
+        color: $white;
+      }
+    }
+
+    .content {
+      .card {
+        background-color: $black-doff;
+      }
+      h3 {
+        color: $white;
+      }
+      h1{
+        color: $white;
+      }
+      p{
+        color: $white !important;
+      }
+      span{
+        color: $white !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+@import "../../assets/scss/variables";
+
+.sidebar {
+    background-color: $dark-grey;
+    min-width: 240px;
+    min-height: 100vh;
+    height: 100%;
+    h3{
+        color: $light-grey;
+    }
+  .sidebar-content-item {
+    cursor: pointer;
+    padding: 16px;
+    text-decoration: none;
+    .icons {
+      color: $light-grey;
+      width: 24px;
+      height: 24px;
+    }
+    p{
+        color: $light-grey;
+    }
+
+    &:hover{
+        background-color: $dark-grey-80;
+    }
+
+    &.active{
+        background-color: $dark-grey-80;
+        border-left: 2px solid $light-blue;
+    }
+  }
+
+  .divider{
+    height: 1px;
+    width: 100%;
+    background-color: $dark-grey-80;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+    .toggle-open{
+        cursor: pointer;
+        display: block !important;
+        color: $light-grey;
+        svg{
+            width: 32px;
+            height: 32px;
+        }
+        &.active{
+            display: none !important;
+        }
+    }
+    .sidebar{
+        display: none;
+        .toggle-close{
+            
+            cursor: pointer;
+            &.active{
+                color: $light-grey;
+                display: block !important;
+                svg{
+                    width: 32px;
+                    height: 32px;
+                }
+            }
+        }
+        &.active{
+            display: block;
+            position: fixed;
+            z-index: 2;
+        }
+    }
+  }

@@ -1,0 +1,65 @@
+@import "../../assets/scss/variables";
+
+.tickets {
+  background-color: $light-blue;
+  min-height: 100vh;
+  height: auto;
+
+  .content {
+    width: 100%;
+    .card {
+      border-radius: 8px;
+      .btn {
+        &.dropdown-toggle {
+          color: $light-grey;
+          background-color: transparent !important;
+          border: none;
+        }
+      }
+      .sort {
+        cursor: pointer;
+      }
+      .filter {
+        cursor: pointer;
+      }
+      .icons {
+        color: $light-grey;
+        width: 16px;
+      }
+
+      .dataTable {
+        td {
+          padding: 16px 8px;
+          text-transform: capitalize;
+          img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 16px;
+          }
+          .detail {
+            cursor: pointer;
+          }
+        }
+        .priority-high {
+          color: $white;
+          background-color: $red;
+          padding: 4px;
+          border-radius: 16px;
+        }
+        .priority-normal {
+          color: $white;
+          background-color: $green;
+          padding: 4px 16px;
+          border-radius: 16px;
+        }
+        .priority-low {
+          color: $white;
+          background-color: $yellow;
+          padding: 4px 16px;
+          border-radius: 16px;
+        }
+      }
+    }
+  }
+}
